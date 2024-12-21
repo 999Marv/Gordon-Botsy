@@ -1,51 +1,16 @@
 "use server";
 
-// Placeholder function to generate recipes
-export async function generateRecipes(ingredients: string[]): Promise<unknown> {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+import { ChatOpenAI } from "@langchain/openai";
 
-  // Placeholder recipes
-  const recipes = [
-    {
-      name: "Improvised Pasta Surprise",
-      ingredients: ingredients.map((ing) => `${ing} - as needed`),
-      instructions: [
-        "Boil water in a large pot.",
-        "Cook pasta according to package instructions.",
-        "In a separate pan, combine all other ingredients.",
-        "Mix cooked pasta with the ingredient mixture.",
-        "Serve hot and enjoy your culinary experiment!",
-      ],
-      comment:
-        "This dish is so random, it's like a culinary Russian roulette! - Gordon Botsy",
-    },
-    {
-      name: "Mystery Ingredient Stir-Fry",
-      ingredients: ingredients.map((ing) => `${ing} - to taste`),
-      instructions: [
-        "Heat oil in a wok or large frying pan.",
-        "Add all ingredients to the pan in order of cooking time.",
-        "Stir-fry until everything is cooked through.",
-        "Season with salt and pepper.",
-        "Serve over rice or noodles.",
-      ],
-      comment:
-        "It's like a 'What's in my fridge' challenge gone wild! - Gordon Botsy",
-    },
-    {
-      name: "Leftover Lover's Casserole",
-      ingredients: ingredients.map((ing) => `${ing} - as available`),
-      instructions: [
-        "Preheat oven to 375°F (190°C).",
-        "Chop all ingredients into bite-sized pieces.",
-        "Mix everything in a large bowl.",
-        "Transfer to a casserole dish and bake for 30 minutes.",
-        "Let it cool slightly before serving.",
-      ],
-      comment: "It's like a culinary Frankenstein, but tastier! - Gordon Botsy",
-    },
-  ];
+const model = new ChatOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-  return recipes;
+export async function generateRecipes(ingredients: string[]) {
+  const prompt = `Your name is Gordon Botsy, you are a robot version of Gordon Ramsay, you are just like him, the best chef in the world, witty, funny and super cool, I have the following ingredients: ${ingredients.join(
+    ", "
+  )}. Please suggest 3 recipes. The output should be in a JSON format. The object should contain a tag line where you botsy say something witty/edgy about the dish or ingredients in a field named 'botsy', recipe name, field named 'name', and a description field named 'description', array of ingredients field named 'ingredients', and array of step by step instructions named 'instructions'.`;
+
+  const response = await model.invoke(prompt);
+  return JSON.parse(response.content as string);
 }

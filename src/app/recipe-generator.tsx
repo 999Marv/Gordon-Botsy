@@ -13,11 +13,12 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { generateRecipes } from "./actions/generateRecipes";
+import { Recipe } from "@/lib/types";
 
 export default function RecipeGenerator() {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [currentIngredient, setCurrentIngredient] = useState("");
-  const [recipes, setRecipes] = useState<unknown[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const addIngredient = () => {
@@ -36,14 +37,15 @@ export default function RecipeGenerator() {
     setIsLoading(true);
     try {
       const generatedRecipes = await generateRecipes(ingredients);
-      setRecipes(generatedRecipes);
+      setRecipes(generatedRecipes.recipes);
     } catch (error) {
       console.error("Error generating recipes:", error);
-      // You might want to show an error message to the user here
     } finally {
       setIsLoading(false);
     }
   };
+
+  console.log(recipes);
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -65,7 +67,7 @@ export default function RecipeGenerator() {
               value={currentIngredient}
               onChange={(e) => setCurrentIngredient(e.target.value)}
               placeholder="Enter an ingredient"
-              onKeyPress={(e) => e.key === "Enter" && addIngredient()}
+              onKeyDown={(e) => e.key === "Enter" && addIngredient()}
               className="flex-grow"
             />
             <Button onClick={addIngredient} className="flex-shrink-0">
@@ -107,7 +109,7 @@ export default function RecipeGenerator() {
             <CardHeader>
               <CardTitle>{recipe.name}</CardTitle>
               <CardDescription className="italic">
-                &quot;{recipe.comment}&quot; - Gordon Botsy
+                &quot;{recipe.botsy}&quot; - Gordon Botsy
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">
