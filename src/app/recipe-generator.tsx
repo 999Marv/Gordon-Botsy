@@ -14,6 +14,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { generateRecipes } from "./actions/generateRecipes";
 import { Recipe } from "@/lib/types";
+import { Recipes } from "@/app/recipes";
+import { Placeholder } from "@/app/placeholder";
 
 export default function RecipeGenerator() {
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -102,37 +104,8 @@ export default function RecipeGenerator() {
       >
         {isLoading ? "Cooking up ideas..." : "Generate Recipes"}
       </Button>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {recipes.map((recipe, index) => (
-          <Card key={index} className="flex flex-col">
-            <CardHeader>
-              <CardTitle>{recipe.name}</CardTitle>
-              <CardDescription className="italic">
-                &quot;{recipe.botsy}&quot; - Gordon Botsy
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <h3 className="font-bold mb-2">Ingredients:</h3>
-              <ul className="list-disc list-inside mb-4">
-                {recipe.ingredients.map((ingredient: string, i: number) => (
-                  <li key={i} className="text-sm">
-                    {ingredient}
-                  </li>
-                ))}
-              </ul>
-              <h3 className="font-bold mb-2">Instructions:</h3>
-              <ol className="list-decimal list-inside">
-                {recipe.instructions.map((step: string, i: number) => (
-                  <li key={i} className="text-sm mb-1">
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {/* <Recipes recipes={recipes} /> */}
+      <Placeholder />
     </div>
   );
 }

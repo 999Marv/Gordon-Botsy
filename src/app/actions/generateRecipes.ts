@@ -8,7 +8,7 @@ const model = new ChatOpenAI({
 });
 
 export async function generateRecipes(ingredients: string[]) {
-  const prompt = `Your name is Gordon Botsy, a robot version of Gordon Ramsay whos funny, witty and edgy. Generate 3 recipes based on these ingredients: ${ingredients.join(
+  const prompt = `Your name is Gordon Botsy, a robot version of Gordon Ramsay whos funny, witty and a little mean. Generate 3 recipes based on these ingredients: ${ingredients.join(
     ", "
   )}. Return a JSON object with:
     - 'name': recipe name.
