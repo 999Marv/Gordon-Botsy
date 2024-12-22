@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Plus, Trash2, ChefHat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,25 +14,26 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { generateRecipes } from "./actions/generateRecipes";
 import { Recipe } from "@/lib/types";
-import { Recipes } from "@/app/recipes";
 import { Placeholder } from "@/app/placeholder";
+import { Recipes } from "@/app/recipes";
 
 export default function RecipeGenerator() {
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [currentIngredient, setCurrentIngredient] = useState("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const addIngredient = () => {
-    if (currentIngredient.trim()) {
-      setIngredients([...ingredients, currentIngredient.trim()]);
-      setCurrentIngredient("");
-    }
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const removeIngredient = (index: number) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
+  const addIngredient = useCallback(() => {
+    if (inputRef.current && inputRef.current.value.trim()) {
+      setIngredients((prev) => [...prev, inputRef.current!.value.trim()]);
+      inputRef.current.value = "";
+    }
+  }, []);
+
+  const removeIngredient = useCallback((index: number) => {
+    setIngredients((prev) => prev.filter((_, i) => i !== index));
+  }, []);
 
   const handleGenerateRecipes = async () => {
     if (ingredients.length === 0) return;
@@ -66,8 +67,7 @@ export default function RecipeGenerator() {
           <div className="flex space-x-2 mb-4">
             <Input
               type="text"
-              value={currentIngredient}
-              onChange={(e) => setCurrentIngredient(e.target.value)}
+              ref={inputRef}
               placeholder="Enter an ingredient"
               onKeyDown={(e) => e.key === "Enter" && addIngredient()}
               className="flex-grow"
@@ -104,8 +104,7 @@ export default function RecipeGenerator() {
       >
         {isLoading ? "Cooking up ideas..." : "Generate Recipes"}
       </Button>
-      {/* <Recipes recipes={recipes} /> */}
-      <Placeholder />
+      {isLoading ? <Placeholder /> : <Recipes recipes={recipes} />}
     </div>
   );
 }

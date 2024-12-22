@@ -11,14 +11,14 @@ import type { Recipe } from "@/lib/types";
 
 export const Recipes = ({ recipes }: { recipes: Recipe[] }) => {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 ">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {recipes.map((recipe, index) => (
         <Card
           key={index}
           className="flex flex-col border-sky-500 border-[1.5px]"
         >
           <CardHeader>
-            <CardTitle>{recipe.name}</CardTitle>
+            <CardTitle className="pb-3">{recipe.name}</CardTitle>
             <CardDescription className="italic">
               &quot;{recipe.botsy}&quot; - Gordon Botsy
             </CardDescription>
