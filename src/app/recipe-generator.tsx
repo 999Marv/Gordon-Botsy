@@ -56,7 +56,7 @@ export default function RecipeGenerator() {
         <CardHeader>
           <CardTitle className="text-3xl font-bold flex items-center">
             <ChefHat className="mr-2" />
-            Hi! I'm Gordon Botsy 🤖
+            Hi! I&apos;m Gordon Botsy 🤖
           </CardTitle>
           <CardDescription>
             Tell me what ingredients you have, and I&apos;ll whip up some
