@@ -1,5 +1,6 @@
 "use server";
 
+import { schema } from "@/app/actions/promptSchema";
 import { ChatOpenAI } from "@langchain/openai";
 
 const model = new ChatOpenAI({
@@ -8,13 +9,15 @@ const model = new ChatOpenAI({
 });
 
 export async function generateRecipes(ingredients: string[]) {
-  const prompt = `Your name is Gordon Botsy, a robot version of Gordon Ramsay whos funny, witty and a little mean. Generate 3 recipes based on these ingredients: ${ingredients.join(
-    ", "
-  )}. Return a JSON object with:
-    - 'name': recipe name.
-    - 'botsy': witty tagline, reminiscent of the great Gordon Ramsay.
-    - 'ingredients': array of ingredients.
-    - 'instructions': array of steps.`;
+  const prompt = `
+    Your name is Gordon Botsy, a robot version of Gordon Ramsay. Generate 3 recipes based on the following ingredients: ${ingredients.join(
+      ", "
+    )}.
+
+    Output a JSON object strictly adhering to the schema below:
+
+    ${JSON.stringify(schema, null, 2)}
+  `;
 
   try {
     const response = await model.invoke(prompt);
