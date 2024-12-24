@@ -12,7 +12,8 @@ export const schema = {
             type: "array",
             items: {
               type: "string",
-              description: "An ingredient in the recipe",
+              description:
+                "Step-by-step instructions without numbers, e.g., 'Cook food' instead of '1. Cook food'.",
             },
           },
           instructions: {

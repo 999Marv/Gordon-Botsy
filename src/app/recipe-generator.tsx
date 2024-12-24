@@ -21,6 +21,7 @@ export default function RecipeGenerator() {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,11 +39,13 @@ export default function RecipeGenerator() {
   const handleGenerateRecipes = async () => {
     if (ingredients.length === 0) return;
     setIsLoading(true);
+    setHasError(false);
     try {
       const generatedRecipes = await generateRecipes(ingredients);
       setRecipes(generatedRecipes.recipes);
     } catch (error) {
       console.error("Error generating recipes:", error);
+      setHasError(true);
     } finally {
       setIsLoading(false);
     }
@@ -100,9 +103,15 @@ export default function RecipeGenerator() {
       <Button
         onClick={handleGenerateRecipes}
         disabled={ingredients.length === 0 || isLoading}
-        className="w-full mb-8"
+        className={`w-full mb-8 ${
+          hasError ? "bg-red-500 hover:bg-red-600" : ""
+        }`}
       >
-        {isLoading ? "Cooking up ideas..." : "Generate Recipes"}
+        {isLoading
+          ? "Cooking up ideas..."
+          : hasError
+          ? "Something went wrong! Try again"
+          : "Generate Recipes"}
       </Button>
       {isLoading ? <Placeholder /> : <Recipes recipes={recipes} />}
     </div>
